@@ -23,7 +23,7 @@
 #       --name chrome-cdp \
 #       chrome-cdp:local
 
-FROM debian:bullseye-slim
+FROM debian:trixie-slim
 LABEL maintainer="terminaltrillness@gmail.com"
 
 # Install Chrome (unchanged from jess/chrome) + supervisor + socat
@@ -35,16 +35,15 @@ RUN apt-get update && apt-get install -y \
     hicolor-icon-theme \
     libcanberra-gtk* \
     libgl1-mesa-dri \
-    libgl1-mesa-glx \
-    libpangox-1.0-0 \
+    libgl1 \
     libpulse0 \
     libv4l-0 \
     fonts-symbola \
     supervisor \
     socat \
     --no-install-recommends \
-    && curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list \
+    && curl -sSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list \
     && apt-get update && apt-get install -y \
     google-chrome-stable \
     --no-install-recommends \
